@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김비서를 소개합니다</title>
+  <style>
+    /* ── CSS Variables ── */
+    :root {
+      --bg:           linear-gradient(135deg, #dde8ff 0%, #f0ebff 45%, #ddf0ff 100%);
+      --orb1:         rgba(99, 140, 255, 0.25);
+      --orb2:         rgba(160, 100, 255, 0.2);
+      --orb3:         rgba(80, 200, 240, 0.18);
+      --card-bg:      rgba(255,255,255,0.55);
+      --card-border:  rgba(255,255,255,0.85);
+      --card-shadow:  0 8px 32px rgba(59,91,219,0.10), 0 2px 8px rgba(0,0,0,0.06);
+      --card-hover:   0 16px 48px rgba(59,91,219,0.18), 0 4px 12px rgba(0,0,0,0.08);
+      --text-1:       #1a1d27;
+      --text-2:       #555e7b;
+      --text-3:       #888ea8;
+      --accent:       #3b5bdb;
+      --accent-glow:  rgba(59,91,219,0.35);
+      --badge-bg:     rgba(59,91,219,0.12);
+      --badge-text:   #3b5bdb;
+      --toggle-bg:    rgba(255,255,255,0.6);
+      --toggle-border:rgba(255,255,255,0.9);
+    }
+    html[data-theme="dark"] {
+      --bg:           linear-gradient(135deg, #0f0f23 0%, #1a1040 55%, #0d1b2a 100%);
+      --orb1:         rgba(99, 140, 255, 0.18);
+      --orb2:         rgba(160, 100, 255, 0.15);
+      --orb3:         rgba(80, 200, 240, 0.12);
+      --card-bg:      rgba(255,255,255,0.06);
+      --card-border:  rgba(255,255,255,0.12);
+      --card-shadow:  0 8px 32px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.3);
+      --card-hover:   0 16px 48px rgba(0,0,0,0.6), 0 4px 12px rgba(99,140,255,0.15);
+      --text-1:       #e0e0e0;
+      --text-2:       #a0a8c0;
+      --text-3:       #606880;
+      --accent:       #748ffc;
+      --accent-glow:  rgba(116,143,252,0.4);
+      --badge-bg:     rgba(116,143,252,0.15);
+      --badge-text:   #748ffc;
+      --toggle-bg:    rgba(255,255,255,0.08);
+      --toggle-border:rgba(255,255,255,0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.4s ease;
+      overflow: hidden;
+    }
+
+    /* ── Animated orbs ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 { width: 500px; height: 500px; top: -120px; left: -100px; background: var(--orb1); animation: drift1 12s ease-in-out infinite; }
+    .orb-2 { width: 400px; height: 400px; bottom: -80px; right: -80px; background: var(--orb2); animation: drift2 15s ease-in-out infinite; }
+    .orb-3 { width: 300px; height: 300px; top: 40%; left: 55%; background: var(--orb3); animation: drift3 10s ease-in-out infinite; }
+
+    @keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,30px)} }
+    @keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,-40px)} }
+    @keyframes drift3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,25px)} }
+
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      z-index: 100;
+      background: var(--toggle-bg);
+      border: 1px solid var(--toggle-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 50px;
+      padding: 8px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-2);
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .theme-toggle:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+    .theme-toggle .icon { font-size: 16px; line-height: 1; }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 60px 40px;
+      max-width: 720px;
+      width: 100%;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 7px 18px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+      border: 1px solid rgba(59,91,219,0.15);
+      backdrop-filter: blur(8px);
+    }
+    html[data-theme="dark"] .badge { border-color: rgba(116,143,252,0.2); }
+
+    h1 {
+      font-size: 52px;
+      font-weight: 800;
+      color: var(--text-1);
+      line-height: 1.18;
+      margin-bottom: 18px;
+      letter-spacing: -1px;
+      transition: color 0.3s;
+    }
+    h1 span {
+      background: linear-gradient(135deg, var(--accent), #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 17px;
+      color: var(--text-2);
+      margin-bottom: 52px;
+      line-height: 1.7;
+      transition: color 0.3s;
+    }
+
+    /* ── Feature cards ── */
+    .features {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 52px;
+      flex-wrap: wrap;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 28px 22px;
+      width: 190px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--card-hover);
+    }
+
+    .feature-icon { font-size: 34px; margin-bottom: 14px; }
+    .feature-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-1);
+      margin-bottom: 8px;
+      transition: color 0.3s;
+    }
+    .feature-desc {
+      font-size: 12px;
+      color: var(--text-3);
+      line-height: 1.6;
+      transition: color 0.3s;
+    }
+
+    /* ── CTA ── */
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      color: #fff;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 700;
+      padding: 18px 52px;
+      border-radius: 16px;
+      box-shadow: 0 6px 28px var(--accent-glow);
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px var(--accent-glow);
+      filter: brightness(1.08);
+    }
+    .cta-btn:active { transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- Orb backgrounds -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Theme toggle -->
+  <button class="theme-toggle" id="themeToggle" aria-label="테마 전환">
+    <span class="icon" id="themeIcon">🌙</span>
+    <span id="themeLabel">다크 모드</span>
+  </button>
+
+  <div class="hero">
+    <div class="badge">✦ AI 업무 비서</div>
+    <h1>김비서를<br><span>소개합니다</span></h1>
+    <p class="subtitle">
+      복잡한 업무를 한눈에 — 할 일, 일정, 프로젝트, 매출을<br>
+      단 하나의 대시보드에서 관리하는 스마트 비서입니다.
+    </p>
+
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">✅</div>
+        <div class="feature-title">할 일 관리</div>
+        <div class="feature-desc">우선순위별 업무를<br>한눈에 확인하고<br>체크박스로 완료 처리</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <div class="feature-title">주간 일정</div>
+        <div class="feature-desc">월~금 스케줄을<br>깔끔한 표로 정리해<br>빠짐없이 파악</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">실적 분석</div>
+        <div class="feature-desc">프로젝트 진행률과<br>매출 현황을 카드와<br>프로그레스 바로 시각화</div>
+      </div>
+    </div>
+
+    <a href="dashboard.html" class="cta-btn">내 대시보드 보기 →</a>
+  </div>
+
+  <script>
+    const html = document.documentElement;
+    const btn  = document.getElementById('themeToggle');
+    const icon = document.getElementById('themeIcon');
+    const lbl  = document.getElementById('themeLabel');
+
+    function applyTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('kb-theme', theme);
+      if (theme === 'dark') { icon.textContent = '☀️'; lbl.textContent = '라이트 모드'; }
+      else                   { icon.textContent = '🌙'; lbl.textContent = '다크 모드'; }
+    }
+
+    // load saved theme
+    applyTheme(localStorage.getItem('kb-theme') || 'light');
+
+    btn.addEventListener('click', () => {
+      applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+  </script>
+</body>
+</html>
