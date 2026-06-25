@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회의 결과 보고 — 마케팅팀 주간회의</title>
+  <style>
+    /* ── Base ── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background: #f4f6f9;
+      color: #1a1d27;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── Screen wrapper ── */
+    .page {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    /* ── Header band ── */
+    .doc-header {
+      background: linear-gradient(135deg, #3b5bdb 0%, #7c3aed 100%);
+      color: #fff;
+      padding: 36px 40px 28px;
+    }
+
+    .doc-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 10px;
+    }
+
+    .doc-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      margin-bottom: 18px;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .meta-icon { font-size: 15px; opacity: 0.85; }
+    .meta-label { font-weight: 700; opacity: 0.7; margin-right: 2px; }
+
+    /* ── Body ── */
+    .doc-body { padding: 36px 40px; }
+
+    /* ── Section ── */
+    .section { margin-bottom: 36px; }
+    .section:last-child { margin-bottom: 0; }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #3b5bdb;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #eef0f8;
+    }
+
+    .section-icon {
+      width: 28px;
+      height: 28px;
+      background: #eef0f8;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    /* ── Summary list ── */
+    .summary-list { list-style: none; }
+
+    .summary-list li {
+      position: relative;
+      padding: 10px 14px 10px 36px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      color: #2d3048;
+      line-height: 1.65;
+      margin-bottom: 6px;
+      background: #f8f9fc;
+    }
+    .summary-list li:last-child { margin-bottom: 0; }
+
+    .summary-list li::before {
+      content: '';
+      position: absolute;
+      left: 14px;
+      top: 18px;
+      width: 7px;
+      height: 7px;
+      background: #3b5bdb;
+      border-radius: 50%;
+    }
+
+    .summary-list li .highlight {
+      font-weight: 700;
+      color: #3b5bdb;
+    }
+
+    /* ── Action items table ── */
+    .action-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    .action-table thead tr {
+      background: #3b5bdb;
+      color: #fff;
+    }
+
+    .action-table thead th {
+      padding: 11px 16px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .action-table thead th:first-child { border-radius: 8px 0 0 0; }
+    .action-table thead th:last-child  { border-radius: 0 8px 0 0; }
+
+    .action-table tbody tr {
+      border-bottom: 1px solid #eef0f8;
+      transition: background 0.15s;
+    }
+    .action-table tbody tr:last-child { border-bottom: none; }
+    .action-table tbody tr:hover { background: #f5f7ff; }
+
+    .action-table tbody td {
+      padding: 12px 16px;
+      color: #2d3048;
+      vertical-align: middle;
+    }
+
+    /* Assignee chip */
+    .assignee {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #eef0f8;
+      border-radius: 20px;
+      padding: 4px 12px 4px 8px;
+      font-weight: 700;
+      font-size: 12.5px;
+      color: #3b5bdb;
+      white-space: nowrap;
+    }
+
+    .assignee-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b5bdb, #7c3aed);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Due date badge */
+    .due {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .due-urgent { background: #fff0f0; color: #c92a2a; }
+    .due-soon   { background: #fff8e8; color: #e67700; }
+    .due-normal { background: #eef8f0; color: #2b8a3e; }
+    .due-tbd    { background: #f0f2f7; color: #888ea8; }
+
+    /* ── Footer ── */
+    .doc-footer {
+      background: #f8f9fc;
+      border-top: 1px solid #eef0f8;
+      padding: 18px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #888ea8;
+    }
+
+    .next-meeting {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: #555e7b;
+    }
+
+    /* ── Print button (screen only) ── */
+    .print-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: linear-gradient(135deg, #3b5bdb, #7c3aed);
+      color: #fff;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 50px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(59,91,219,0.35);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .print-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(59,91,219,0.45);
+    }
+
+    /* ── Print styles ── */
+    @media print {
+      body { background: #fff; font-size: 12pt; }
+
+      .page {
+        max-width: 100%;
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .doc-header {
+        /* keep gradient in color print; fallback for grayscale */
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        padding: 24px 32px 20px;
+      }
+
+      .doc-body { padding: 24px 32px; }
+
+      .print-btn { display: none; }
+
+      .action-table thead tr {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .summary-list li { background: #f8f9fc; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+      a { text-decoration: none; }
+
+      .page { page-break-inside: avoid; }
+    }
+
+    /* ── Page nav ── */
+    .page-nav {
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0 24px;
+      display: flex;
+      align-items: stretch;
+      gap: 2px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      overflow-x: auto;
+      scrollbar-width: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .page-nav::-webkit-scrollbar { display: none; }
+    .page-nav a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      padding: 0 18px;
+      height: 44px;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.18s, background 0.18s, border-color 0.18s;
+    }
+    .page-nav a:hover  { color: #3b5bdb; background: rgba(59,91,219,0.06); }
+    .page-nav a.active { color: #3b5bdb; font-weight: 700; border-bottom-color: #3b5bdb; background: rgba(59,91,219,0.07); }
+  </style>
+</head>
+<body>
+
+<nav class="page-nav" id="pageNav">
+  <a href="dashboard.html">🏠 대시보드</a>
+  <a href="meeting-result.html">📝 회의록</a>
+  <a href="chart.html">📊 매출 현황</a>
+  <a href="diagram.svg">🔄 업무 프로세스</a>
+  <a href="report.html">🔍 사이트 분석</a>
+</nav>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <div class="doc-label">Meeting Result Report</div>
+    <div class="doc-title">마케팅팀 주간회의 결과 보고</div>
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="meta-icon">📅</span>
+        <span><span class="meta-label">일시</span>2026년 3월 10일 (월)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-icon">👥</span>
+        <span><span class="meta-label">참석</span>김대리, 이과장, 박사원, 정팀장</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-icon">📍</span>
+        <span><span class="meta-label">형태</span>팀 정기 회의</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="doc-body">
+
+    <!-- 논의 내용 요약 -->
+    <div class="section">
+      <div class="section-title">
+        <div class="section-icon">📋</div>
+        논의 내용 요약
+      </div>
+      <ul class="summary-list">
+        <li>SNS 광고 A/B 테스트 결과, <span class="highlight">B안(영상형)이 A안 대비 클릭률 2.3배</span> 높아 B안을 기반으로 영상 광고 3개 추가 제작하기로 확정.</li>
+        <li>인플루언서 협업 제안서 3곳 발송 중 1곳(푸드스타일리 김OO)이 회신해 <span class="highlight">이번 주 안에 미팅 일정을 확정</span>할 예정.</li>
+        <li>4월 신제품 런칭에 맞춰 <span class="highlight">사전 티저를 3월 넷째 주부터 시작</span>하기로 결정. 콘텐츠 기획은 정팀장이 주도.</li>
+        <li>영상 광고 제작비 <span class="highlight">추가 200만원 예산 조정</span>을 다음 회의 전 요청할 예정.</li>
+        <li>3월 프로모션 기획안(봄맞이 할인 이벤트, 3/20~3/31)을 <span class="highlight">다음 회의(3/17)에서 공식 검토</span>.</li>
+      </ul>
+    </div>
+
+    <!-- 액션 아이템 -->
+    <div class="section">
+      <div class="section-title">
+        <div class="section-icon">✅</div>
+        액션 아이템
+      </div>
+      <table class="action-table">
+        <thead>
+          <tr>
+            <th style="width:110px">담당자</th>
+            <th>할 일</th>
+            <th style="width:110px">기한</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="assignee">
+                <div class="assignee-avatar">김</div>
+                김대리
+              </div>
+            </td>
+            <td>3월 프로모션 기획안 초안 작성 (봄맞이 할인 이벤트 3/20~3/31)</td>
+            <td><span class="due due-urgent">3월 12일 (수)</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="assignee">
+                <div class="assignee-avatar">이</div>
+                이과장
+              </div>
+            </td>
+            <td>인플루언서 미팅 일정 확정 (푸드스타일리 김OO)</td>
+            <td><span class="due due-urgent">3월 14일 (금)</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="assignee">
+                <div class="assignee-avatar">박</div>
+                박사원
+              </div>
+            </td>
+            <td>B안 기반 영상 광고 3개 추가 제작</td>
+            <td><span class="due due-urgent">3월 14일 (금)</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="assignee">
+                <div class="assignee-avatar">박</div>
+                박사원
+              </div>
+            </td>
+            <td>경쟁사 C사 신규 캠페인 분석 후 결과 공유</td>
+            <td><span class="due due-soon">3월 16일 (일)</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="assignee">
+                <div class="assignee-avatar">정</div>
+                정팀장
+              </div>
+            </td>
+            <td>4월 신제품 티저 콘텐츠 기획안 작성 (3월 넷째 주 시작 목표)</td>
+            <td><span class="due due-normal">3월 21일 (토)</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="assignee">
+                <div class="assignee-avatar">정</div>
+                정팀장
+              </div>
+            </td>
+            <td>영상 제작비 추가 예산 200만원 조정 요청</td>
+            <td><span class="due due-tbd">다음 회의 전</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /doc-body -->
+
+  <!-- Footer -->
+  <div class="doc-footer">
+    <div class="next-meeting">
+      📅 &nbsp;다음 회의: <strong>2026년 3월 17일 (월) 오전 10:00</strong>
+    </div>
+    <div>작성일 2026.03.10</div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- Print button -->
+<button class="print-btn" onclick="window.print()">
+  🖨️ 인쇄 / PDF 저장
+</button>
+
+<script>
+(function() {
+  const p = location.pathname.split('/').pop() || 'dashboard.html';
+  document.querySelectorAll('.page-nav a').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === p);
+  });
+})();
+</script>
+</body>
+</html>
